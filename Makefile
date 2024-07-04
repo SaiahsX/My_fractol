@@ -6,7 +6,7 @@
 #    By: oadewumi <oadewumi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 16:05:10 by oadewumi          #+#    #+#              #
-#    Updated: 2024/07/01 14:33:41 by oadewumi         ###   ########.fr        #
+#    Updated: 2024/07/04 21:44:51 by oadewumi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,9 @@ LIBFT_DIR = ./libft
 
 SOURCES = fractol.c \
 			security_utilities.c \
+			garage_files.c \
+			fract_files.c \
+			mlx_utilities.c \
 			utilities.c
 OFILES = $(SOURCES:.c=.o)
 
@@ -25,9 +28,20 @@ RM = rm -rf
 CFLAGS = -Wall -Wextra -Werror -Ofast -I $(LIBFT_DIR) -I ./include -I $(LIBMLX)/include
 LDFLAGS = -L $(LIBMLX)/build
 LIBS = -lmlx42 -ldl -lglfw -pthread -lm
-LIBFT = libft/libft.a
+LIBFT = $(LIBFT_DIR)/libft.a
 
-all: libmlx $(NAME)
+# MLX42
+REPO_URL=https://github.com/codam-coding-college/MLX42.git
+REPO_DIR=MLX42
+
+all: clone libmlx $(NAME)
+
+clone:
+	@if [ ! -d "$(REPO_DIR)" ]; then \
+		git clone $(REPO_URL); \
+	else \
+		echo "$(REPO_DIR) already exists."; \
+	fi
 
 libmlx:
 	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
@@ -41,15 +55,16 @@ $(LIBFT):
 norm:
 	norminette -R CheckForbiddenSourceHeader $(SOURCES)
 
-debug: CFLAGS += -g -fsanitize=address
+debug: CFLAGS += -g -fsanitize=address -Ofast
 debug: re
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@$(RM) $(OFILES) $(LIBMLX)/build
+	@$(RM) $(OFILES) 
 	@make -C $(LIBFT_DIR) clean
+	@$(RM) $(LIBMLX)/build
 
 fclean: clean
 	@$(RM) $(NAME)
@@ -57,4 +72,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re norm libmlx debug
+.PHONY: all clean fclean re norm libmlx debug clone

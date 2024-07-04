@@ -6,7 +6,7 @@
 /*   By: oadewumi <oadewumi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 16:44:32 by oadewumi          #+#    #+#             */
-/*   Updated: 2024/07/01 14:31:18 by oadewumi         ###   ########.fr       */
+/*   Updated: 2024/07/04 17:21:28 by oadewumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,3 +39,15 @@ void    set_and_perror(const char *msg)
     perror(msg);
     exit (EXIT_FAILURE);
 }
+
+//This function is used to specifically exit on error in a clean way if 
+//draw.img fails. 
+//This function call mlx_terminate which is prebuilt function in the
+//MLX42 library.
+//Then my own error handling function is called to exit safely.
+void	draw_error(mlx_t *mlx)
+{
+	mlx_terminate(mlx);
+	set_and_perror("draw.img failed to execute!");
+}
+

@@ -6,7 +6,7 @@
 /*   By: oadewumi <oadewumi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 18:20:10 by oadewumi          #+#    #+#             */
-/*   Updated: 2024/07/03 21:56:11 by oadewumi         ###   ########.fr       */
+/*   Updated: 2024/07/04 20:49:58 by oadewumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,6 @@
 # define HEIGHT 700
 # define MAX_LOOPING 500
 
-// typedef struct s_draw
-// {
-// 	void		*window;
-// 	void		*context;
-// 	int32_t		width;
-// 	int32_t		height;
-// 	double		delta_time;
-// }	t_draw;
-
-// typedef void (*mlx_scrollfunc)(double xdelta, double ydelta, void* param);
-
 typedef struct s_draw
 {
         mlx_t		*mlx;
@@ -50,20 +39,23 @@ typedef struct s_draw
         double		cmplx_y;
 }	t_draw;
 
-void            ft_scroll_hook(double xdelta, double ydelta, void *param);
-void    	ft_key_hook(mlx_key_data_t keydata, void *param);
-void	        validate_input(int argc, char *argv[]);
-void	        mlx_init_settings(char *argv[], t_draw *draw);
-// int	    ft_strcmp(const char *src, const char *dest);
+void	validate_input(int argc, char *argv[]);
+void	mlx_init_settings(char *argv[], t_draw *draw);
+void	pix_rend(t_draw *draw);
 void 	pix_rend_help(t_draw *draw);
-// unsigned int 	pix_rend_help(t_draw *draw);
-void            pix_rend(t_draw *draw);
-// unsigned int    pix_rend(t_draw *draw);
-double          ft_atod(char *str);
+int		julia(double x, double y, double cmplx_x, double cmplx_y);
+int		mandelbrot(double x, double y);
+void	ft_scroll_hook(double xdelta, double ydelta, void *param);
+void    ft_key_hook(mlx_key_data_t keydata, void *param);
+void    zoom_in(t_draw *draw);
+void    zoom_out(t_draw *draw);
+
+//utilities
+double	ft_atod(char *str);
 
 //error handling
-void	error_message(char *str, char *txt);
 void    set_and_perror(const char *msg);
 void	draw_error(mlx_t *mlx);
+void	error_message(char *str, char *txt);
 
 # endif

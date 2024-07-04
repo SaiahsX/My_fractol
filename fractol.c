@@ -6,7 +6,7 @@
 /*   By: oadewumi <oadewumi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 18:18:49 by oadewumi          #+#    #+#             */
-/*   Updated: 2024/07/03 21:51:04 by oadewumi         ###   ########.fr       */
+/*   Updated: 2024/07/04 19:46:10 by oadewumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,26 @@ void	mlx_init_settings(char *argv[], t_draw *draw)
 	}
 }
 
-//This function is used to specifically exit on error in a clean way if 
-//draw.img fails. 
-//This function call mlx_terminate which is prebuilt function in the
-//MLX42 library.
-//Then my own error handling function is called to exit safely.
-void	draw_error(mlx_t *mlx)
+static unsigned int	calc_colour(int iteration)
 {
-	mlx_terminate(mlx);
-	set_and_perror("draw.img failed to execute!");
+	unsigned int	colour;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+	double			iter_ratio;
+
+	if (iteration < MAX_LOOPING)
+	{
+		iter_ratio = (double)iteration / MAX_LOOPING;
+		r = (unsigned char)(255 * (1 -iter_ratio) *iter_ratio);
+		g = (unsigned char)(255 * (1 - iter_ratio));
+		b = (unsigned char)(255 * iter_ratio);
+		colour = (r << 6) | (g << 8) | b;
+	}
+	else
+		colour = 0xE6E6FA;
+		// colour = 0x000033;
+	return (colour);
 }
 
 
@@ -60,32 +71,8 @@ void	pix_rend_help(t_draw *draw)
 	draw->x++;
 }
 
-
-/* unsigned int	pix_rend_help(t_draw *draw)
-{
-	double			tmp_x;
-	double			tmp_y;
-	int				iteration;
-	unsigned int	colour;
-	
-	tmp_x = draw->x_min + ((draw->x / (double)WIDTH)
-		* (draw->x_max - draw->x_min));
-	tmp_y = draw->y_min + ((draw->y / (double)HEIGHT)
-		* (draw->y_max - draw->y_min));
-	if (draw->type == 'j')
-		iteration = julia(tmp_x, tmp_y, draw->cmplx_x, draw->cmplx_y);
-	else
-		iteration = mandelbrot(tmp_x, tmp_y);
-	colour = calc_colour(iteration);
-	draw->x++;
-	return (colour);
-}*/
-
 void	pix_rend(t_draw *draw)
 {
-	unsigned int	colour;
-	
-	colour = 0;
 	draw->y = 0;
 	while(draw->y < HEIGHT)
 	{
@@ -96,26 +83,7 @@ void	pix_rend(t_draw *draw)
 		}
 		draw->y++;
 	}
-	return (colour);
 }
-
-/* unsigned int	pix_rend(t_draw *draw)
-{
-	unsigned int	colour;
-	
-	colour = 0;
-	draw->y = 0;
-	while(draw->y < HEIGHT)
-	{
-		draw->x = 0;
-		while (draw->x < WIDTH)
-		{
-		colour = pix_rend_help(draw);
-		}
-		draw->y++;
-	}
-	return (colour);
-} */
 
 int main(int ac, char *av[])
 {
@@ -130,8 +98,11 @@ int main(int ac, char *av[])
 	if (!draw.img || mlx_image_to_window(draw.mlx,draw.img, 0, 0))
 		draw_error(draw.mlx);
 	pix_rend(&draw);
+	//mlx_image_to_window(draw.mlx,draw.img, 0, 0);
 	mlx_scroll_hook(draw.mlx, &ft_scroll_hook, &draw);
 	mlx_key_hook(draw.mlx, ft_key_hook, &draw);
-
-    return (0);
+	mlx_loop(draw.mlx);
+	mlx_delete_image(draw.mlx, draw.img);
+	mlx_terminate(draw.mlx);
+    return (EXIT_SUCCESS);
 }

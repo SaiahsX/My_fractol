@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: oadewumi <oadewumi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/03 20:32:50 by oadewumi          #+#    #+#             */
-/*   Updated: 2024/07/03 21:55:42 by oadewumi         ###   ########.fr       */
+/*   Created: 2026/07/03 20:32:50 by oadewumi          #+#    #+#             */
+/*   Updated: 2024/07/04 18:44:25 by oadewumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,42 @@ void    zoom_out(t_draw *draw)
     draw->y_min = draw->y_min - (y_range * 2);
     draw->y_max = draw->y_max + (y_range * 2); 
 }
+static void execute_key(t_draw *draw, char key)
+{
+    if (key == '+')
+    {
+        draw->y_min = draw->y_min + ((draw->y_max - draw->y_min) / 50);
+        draw->y_max = draw->y_max + ((draw->y_max - draw->y_min) / 50);
+    }
+    else
+    {
+        draw->y_min = draw->y_min - ((draw->y_max - draw->y_min) / 50);
+        draw->y_max = draw->y_max - ((draw->y_max - draw->y_min) / 50);
+    }
+}
 
 void	ft_key_hook(mlx_key_data_t keydata, void *param)
 {
-	// continue 030724
+    t_draw  *draw;
+    
+    draw = param;
+    if(keydata.key == MLX_KEY_ESCAPE)
+        mlx_close_window (draw->mlx);
+    else if (keydata.key == MLX_KEY_DOWN)
+        execute_key(draw, '+');
+    else if (keydata.key == MLX_KEY_UP)
+        execute_key(draw, '-');
+    else if (keydata.key == MLX_KEY_LEFT)
+    {
+        draw->x_min = draw->x_min -((draw->x_max - draw->x_min) / 50);
+        draw->x_max = draw->x_max -((draw->x_max - draw->x_min) / 50);
+    }
+    else if (keydata.key == MLX_KEY_RIGHT)
+    {
+        draw->x_min = draw->x_min + ((draw->x_max - draw->x_min) / 50);
+        draw->x_max = draw->x_max + ((draw->x_max - draw->x_min) / 50);
+    }
+    pix_rend(draw);
 }
 
 void    ft_scroll_hook(double xdelta, double ydelta, void *param)

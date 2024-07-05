@@ -6,7 +6,7 @@
 /*   By: oadewumi <oadewumi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 16:44:32 by oadewumi          #+#    #+#             */
-/*   Updated: 2024/07/04 17:21:28 by oadewumi         ###   ########.fr       */
+/*   Updated: 2024/07/05 16:49:03 by oadewumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,27 @@
 //the file descriptor used is 2, (written to standard error output).
 void	error_message(char *str, char *txt)
 {
-	ssize_t msg;
+	ssize_t	msg;
 
-    msg = write(2, "Error: ", 7);
-    if (msg == -1)
-    {
-        error_message("error write malfunction", 0);
-    }
-    if (str)
-        ft_putendl_fd(str, 2);
-    if (txt)
-        ft_putendl_fd(txt, 2);
-    exit(EXIT_FAILURE);
+	msg = write(2, "Error: ", 7);
+	if (msg == -1)
+	{
+		error_message("error write malfunction", 0);
+	}
+	if (str)
+		ft_putendl_fd(str, 2);
+	if (txt)
+		ft_putendl_fd(txt, 2);
+	exit(EXIT_FAILURE);
 }
 
 //utilising the perror function with EINVAL error code
-void    set_and_perror(const char *msg)
+// Sets errno to an appropriate error code
+void	set_and_perror(const char *msg)
 {
-    errno = EINVAL;  // Set errno to an appropriate error code
-    perror(msg);
-    exit (EXIT_FAILURE);
+	errno = EINVAL;
+	perror(msg);
+	exit (EXIT_FAILURE);
 }
 
 //This function is used to specifically exit on error in a clean way if 
@@ -50,4 +51,3 @@ void	draw_error(mlx_t *mlx)
 	mlx_terminate(mlx);
 	set_and_perror("draw.img failed to execute!");
 }
-

@@ -6,7 +6,7 @@
 /*   By: oadewumi <oadewumi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/03 20:32:50 by oadewumi          #+#    #+#             */
-/*   Updated: 2024/07/04 18:44:25 by oadewumi         ###   ########.fr       */
+/*   Updated: 2024/07/05 16:45:21 by oadewumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,78 +33,79 @@
 // Not too fast: Ensures the zooming effect is smooth and not too aggressive.
 // Not too slow: Keeps the zooming effect noticeable without requiring too 
 // many steps to achieve significant zooming.
-void    zoom_in(t_draw *draw)
+void	zoom_in(t_draw *draw)
 {
-    double  x_range;
-    double  y_range;
+	double	x_range;
+	double	y_range;
 
-    x_range = (draw->x_max - draw->x_min) / 6;
-    y_range = (draw->y_max - draw->y_min) / 6;
-    draw->x_min = draw->x_min + (x_range / 2);
-    draw->x_max = draw->x_max - (x_range / 2);
-    draw->y_min = draw->y_min + (y_range / 2);
-    draw->y_max = draw->y_max - (y_range / 2);
+	x_range = (draw->x_max - draw->x_min) / 6;
+	y_range = (draw->y_max - draw->y_min) / 6;
+	draw->x_min = draw->x_min + (x_range / 2);
+	draw->x_max = draw->x_max - (x_range / 2);
+	draw->y_min = draw->y_min + (y_range / 2);
+	draw->y_max = draw->y_max - (y_range / 2);
 }
 
-void    zoom_out(t_draw *draw)
+void	zoom_out(t_draw *draw)
 {
-    double  x_range;
-    double  y_range;
+	double	x_range;
+	double	y_range;
 
-    x_range = (draw->x_max - draw->x_min) / 6;
-    y_range = (draw->y_max - draw->y_min) / 6;
-    draw->x_min = draw->x_min - (x_range * 2);
-    draw->x_max = draw->x_max + (x_range * 2);
-    draw->y_min = draw->y_min - (y_range * 2);
-    draw->y_max = draw->y_max + (y_range * 2); 
+	x_range = (draw->x_max - draw->x_min) / 6;
+	y_range = (draw->y_max - draw->y_min) / 6;
+	draw->x_min = draw->x_min - (x_range * 2);
+	draw->x_max = draw->x_max + (x_range * 2);
+	draw->y_min = draw->y_min - (y_range * 2);
+	draw->y_max = draw->y_max + (y_range * 2);
 }
-static void execute_key(t_draw *draw, char key)
+
+static void	execute_key(t_draw *draw, char key)
 {
-    if (key == '+')
-    {
-        draw->y_min = draw->y_min + ((draw->y_max - draw->y_min) / 50);
-        draw->y_max = draw->y_max + ((draw->y_max - draw->y_min) / 50);
-    }
-    else
-    {
-        draw->y_min = draw->y_min - ((draw->y_max - draw->y_min) / 50);
-        draw->y_max = draw->y_max - ((draw->y_max - draw->y_min) / 50);
-    }
+	if (key == '+')
+	{
+		draw->y_min = draw->y_min + ((draw->y_max - draw->y_min) / 50);
+		draw->y_max = draw->y_max + ((draw->y_max - draw->y_min) / 50);
+	}
+	else
+	{
+		draw->y_min = draw->y_min - ((draw->y_max - draw->y_min) / 50);
+		draw->y_max = draw->y_max - ((draw->y_max - draw->y_min) / 50);
+	}
 }
 
 void	ft_key_hook(mlx_key_data_t keydata, void *param)
 {
-    t_draw  *draw;
-    
-    draw = param;
-    if(keydata.key == MLX_KEY_ESCAPE)
-        mlx_close_window (draw->mlx);
-    else if (keydata.key == MLX_KEY_DOWN)
-        execute_key(draw, '+');
-    else if (keydata.key == MLX_KEY_UP)
-        execute_key(draw, '-');
-    else if (keydata.key == MLX_KEY_LEFT)
-    {
-        draw->x_min = draw->x_min -((draw->x_max - draw->x_min) / 50);
-        draw->x_max = draw->x_max -((draw->x_max - draw->x_min) / 50);
-    }
-    else if (keydata.key == MLX_KEY_RIGHT)
-    {
-        draw->x_min = draw->x_min + ((draw->x_max - draw->x_min) / 50);
-        draw->x_max = draw->x_max + ((draw->x_max - draw->x_min) / 50);
-    }
-    pix_rend(draw);
+	t_draw	*draw;
+
+	draw = param;
+	if (keydata.key == MLX_KEY_ESCAPE)
+		mlx_close_window (draw->mlx);
+	else if (keydata.key == MLX_KEY_DOWN)
+		execute_key(draw, '+');
+	else if (keydata.key == MLX_KEY_UP)
+		execute_key(draw, '-');
+	else if (keydata.key == MLX_KEY_LEFT)
+	{
+		draw->x_min = draw->x_min -((draw->x_max - draw->x_min) / 50);
+		draw->x_max = draw->x_max -((draw->x_max - draw->x_min) / 50);
+	}
+	else if (keydata.key == MLX_KEY_RIGHT)
+	{
+		draw->x_min = draw->x_min + ((draw->x_max - draw->x_min) / 50);
+		draw->x_max = draw->x_max + ((draw->x_max - draw->x_min) / 50);
+	}
+	pix_rend(draw);
 }
 
-void    ft_scroll_hook(double xdelta, double ydelta, void *param)
+void	ft_scroll_hook(double xdelta, double ydelta, void *param)
 {
-    t_draw  *draw;
-     
-    draw = (t_draw *)param;
-    (void)xdelta;
-    if (ydelta > 0)
-        zoom_in(draw);
-    else if (ydelta < 0)
+	t_draw	*draw;
+
+	draw = (t_draw *)param;
+	(void)xdelta;
+	if (ydelta > 0)
+		zoom_in(draw);
+	else if (ydelta < 0)
 		zoom_out(draw);
-	pix_rend(draw);// figure out what works: pix_rend(*draw)
+	pix_rend(draw);
 }

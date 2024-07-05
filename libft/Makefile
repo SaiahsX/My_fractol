@@ -63,10 +63,10 @@ NAME    =    libft.a
 all:        $(NAME)
 
 $(NAME):    $(OFILES)	$(BOFILES)
-		ar -rcs	$(NAME)	$(OFILES)	$(BOFILES)
+	@ ar -rcs	$(NAME)	$(OFILES)	$(BOFILES)
 
 bonus:	$(OFILES) $(BOFILES)
-		ar -rcs $(NAME)	$(OFILES)	$(BOFILES)
+	@ ar -rcs $(NAME)	$(OFILES)	$(BOFILES)
 		touch	.bonus
 
 %.o: %.c

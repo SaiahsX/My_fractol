@@ -6,7 +6,7 @@
 /*   By: oadewumi <oadewumi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/03 20:32:50 by oadewumi          #+#    #+#             */
-/*   Updated: 2024/07/05 16:45:21 by oadewumi         ###   ########.fr       */
+/*   Updated: 2024/07/08 08:32:27 by oadewumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,16 @@ void	ft_key_hook(mlx_key_data_t keydata, void *param)
 	draw = param;
 	if (keydata.key == MLX_KEY_ESCAPE)
 		mlx_close_window (draw->mlx);
-	else if (keydata.key == MLX_KEY_DOWN)
+	else if (keydata.key == MLX_KEY_DOWN || keydata.key == MLX_KEY_S)
 		execute_key(draw, '+');
-	else if (keydata.key == MLX_KEY_UP)
+	else if (keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_W)
 		execute_key(draw, '-');
-	else if (keydata.key == MLX_KEY_LEFT)
+	else if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_A)
 	{
 		draw->x_min = draw->x_min -((draw->x_max - draw->x_min) / 50);
 		draw->x_max = draw->x_max -((draw->x_max - draw->x_min) / 50);
 	}
-	else if (keydata.key == MLX_KEY_RIGHT)
+	else if (keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_D)
 	{
 		draw->x_min = draw->x_min + ((draw->x_max - draw->x_min) / 50);
 		draw->x_max = draw->x_max + ((draw->x_max - draw->x_min) / 50);

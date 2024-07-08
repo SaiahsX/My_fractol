@@ -6,7 +6,7 @@
 /*   By: oadewumi <oadewumi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:10:01 by oadewumi          #+#    #+#             */
-/*   Updated: 2024/07/05 17:04:24 by oadewumi         ###   ########.fr       */
+/*   Updated: 2024/07/08 13:04:03 by oadewumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static void	validate_julia(char *argv[])
 		"expected format: ./fractol julia <-2.0> <2.0>");
 	else if (x < -2.0 || x > 2.0 || y < -2.0 || y > 2.0)
 		error_message("Invalid julia parameter range/type detected", \
-		"expected range: <-2.0> <2.0>");
+		"expected range: <-2.0> to <2.0>");
 	return ;
 }
 
@@ -102,22 +102,44 @@ static void	validate_julia(char *argv[])
 void	validate_input(int argc, char *argv[])
 {
 	if (argc < 2 || argv[1][0] == '\0')
-		error_message("Insufficient/Invalid arguments!", 0);
-	if (ft_strncmp(argv[1], "mandelbrot", 10) == 0)
+		error_message("Insufficient/Invalid arguments! \
+		\nTry ./fractol mandelbrot or ./fractol julia -0.1 0.651", 0);
+	if (ft_strncmp(argv[1], "mandelbrot", 11) == 0)
 	{
 		if (argc > 2)
 			error_message("Too many arguments!", \
 			"correct format is: ./fractol mandelbrot");
 	}
-	else if (ft_strncmp(argv[1], "julia", 5) == 0)
+	else if (ft_strncmp(argv[1], "julia", 6) == 0)
 	{
 		if (argc != 4)
 			error_message("Invalid argument count detected", \
-			"expected format: ./fractol julia <-2.0> <2.0>");
+			"expected format: ./fractol julia <-0.75> <0.11>");
 		else
 			validate_julia(argv);
 	}
 	else
 		error_message("Invalid fractol name!", \
 		"Available options: mandelbrot or julia");
+}
+
+// s_col = start colour, e_col = end colour
+// intrplt = interpolate
+unsigned int	intrplt(double t, unsigned int s_col, unsigned int e_col)
+{
+	t_interp		colours;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+
+	colours.start_r = (s_col >> 16) & 0xFF;
+	colours.start_g = (s_col >> 8) & 0xFF;
+	colours.start_b = s_col & 0xFF;
+	colours.end_r = (e_col >> 16) & 0xFF;
+	colours.end_g = (e_col >> 8) & 0xFF;
+	colours.end_b = e_col & 0xFF;
+	r = (unsigned char)((1 - t) * colours.start_r + t * colours.end_r);
+	g = (unsigned char)((1 - t) * colours.start_g + t * colours.end_g);
+	b = (unsigned char)((1 - t) * colours.start_b + t * colours.end_b);
+	return ((r << 16) | (g << 8) | b);
 }

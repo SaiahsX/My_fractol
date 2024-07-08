@@ -6,7 +6,7 @@
 #    By: oadewumi <oadewumi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 16:05:10 by oadewumi          #+#    #+#              #
-#    Updated: 2024/07/05 18:49:16 by oadewumi         ###   ########.fr        #
+#    Updated: 2024/07/08 10:09:06 by oadewumi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,8 +70,8 @@ $(LIBFT):
 
 norm:
 	@echo "$(YELLOW)Running norminette...$(RESET)"
-	@find . -name "*.c" -not -path "./MLX42/*" -print | xargs norminette -R CheckForbiddenSourceHeader
-	@find . -name "*.h" -not -path "./MLX42/*" -print | xargs norminette -R CheckForbiddenSourceHeader
+	@find . -name "*.c" -not -path "./MLX42/*" -print | xargs norminette -R CheckForbiddenSourceHeader > /dev/null
+	@find . -name "*.h" -not -path "./MLX42/*" -print | xargs norminette -R CheckForbiddenSourceHeader > /dev/null
 	@echo "$(BLUE)Norminette check completed.$(RESET)"
 
 debug: CFLAGS += -g -fsanitize=address -Ofast
